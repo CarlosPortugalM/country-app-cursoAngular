@@ -1,0 +1,23 @@
+<h2>Por capital</h2>
+<hr>
+
+<div class="row">
+  <div class="col">
+    <!-- Search box -->
+    <shearch-search-box
+      placeholder="Ingrese capital"
+      (onNewValue)="searchByCapital($event)"
+    >
+
+    </shearch-search-box>
+  </div>
+</div>
+<hr>
+<div class="row">
+  <div class="col">
+    <!--
+     -->
+     <countries-table [countries]="countries"></countries-table>
+
+  </div>
+</div>

@@ -5,8 +5,10 @@
   <div class="col">
     <!-- Search box -->
     <shearch-search-box
-      placeholder="Ingrese país"
       (onNewValue)="searchByCountry($event)"
+      [initialValue]="initialValue"
+      placeholder="Ingrese país"
+
     >
 
     </shearch-search-box>
@@ -17,6 +19,7 @@
   <div class="col">
     <!--
      -->
+     <shared-loading-spinner *ngIf="isLoading"></shared-loading-spinner>
      <countries-table [countries]="countries"></countries-table>
 
   </div>

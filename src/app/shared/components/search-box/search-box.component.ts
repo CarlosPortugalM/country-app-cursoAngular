@@ -1,4 +1,5 @@
-import { Component, ElementRef, EventEmitter, Input, Output, ViewChild } from '@angular/core';
+import { Component, ElementRef, EventEmitter, Input, OnDestroy, OnInit, Output, ViewChild } from '@angular/core';
+import { Subject, Subscription, debounceTime } from 'rxjs';
 
 @Component({
   selector: 'shearch-search-box',
@@ -6,7 +7,14 @@ import { Component, ElementRef, EventEmitter, Input, Output, ViewChild } from '@
   styles: [
   ]
 })
-export class SearchBoxComponent {
+export class SearchBoxComponent implements OnInit, OnDestroy{
+
+
+  private debouncer: Subject<string> = new Subject<string>;
+  private debouncerSuscription?: Subscription;
+
+  @Input()
+  public initialValue?: string = '';
 
   @Input()
   public placeholder: string = '';
@@ -19,9 +27,30 @@ export class SearchBoxComponent {
 
   constructor(){}
 
+  ngOnInit(): void {
+    this.debouncerSuscription= this.debouncer
+      .pipe(
+        debounceTime(500)
+      )
+      .subscribe( value => {
+        this.onNewValue.emit(value);
+    })
+  }
+
+  ngOnDestroy(): void {
+    this.debouncerSuscription?.unsubscribe();
+  }
+
   public emitValue(): void {
     this.onNewValue.emit(this.txtInput.nativeElement.value);
     this.txtInput.nativeElement.value = '';
+
+  }
+
+
+
+  public onKeyPress(searchTerm: string ): void {
+    this.debouncer.next(searchTerm);
 
   }
 
